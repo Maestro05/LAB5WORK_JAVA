@@ -75,3 +75,69 @@ class Category {
         System.out.println("Категория: " + name + ", Описание: " + description);
     }
 }
+
+
+class Reader {
+    private String name;
+    private String surname;
+    private String cardNumber;
+
+    // Конструктор по умолчанию
+    public Reader() {
+        this.name = "";
+        this.surname = "";
+        this.cardNumber = "";
+    }
+
+    // Метод для ввода данных о читателе
+    public void input() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Введите имя читателя: ");
+        this.name = sc.nextLine();
+        System.out.print("Введите фамилию читателя: ");
+        this.surname = sc.nextLine();
+        System.out.print("Введите номер читательского билета: ");
+        this.cardNumber = sc.nextLine();
+    }
+
+    // Методы доступа
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    // Метод для вывода данных о читателе
+    public void print() {
+        System.out.println("Читатель: " + name + " " + surname + ", Номер карты: " + cardNumber);
+    }
+}
+
+class BookIssue {
+    private Book book;
+    private Reader reader;
+    private String issueDate;
+    private String dueDate;
+
+    // Конструктор
+    public BookIssue(Book book, Reader reader, String issueDate, String dueDate) {
+        this.book = book;
+        this.reader = reader;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
+    }
+
+    // Метод для вывода данных о выдаче книги
+    public void print() {
+        System.out.println("Выдача книги: ");
+        book.print();
+        reader.print();
+        System.out.println("Дата выдачи: " + issueDate + ", Срок возврата: " + dueDate);
+    }
+}
