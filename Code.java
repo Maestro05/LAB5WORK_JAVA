@@ -75,50 +75,6 @@ class Category {
         System.out.println("Категория: " + name + ", Описание: " + description);
     }
 }
-
-
-class Reader {
-    private String name;
-    private String surname;
-    private String cardNumber;
-
-    // Конструктор по умолчанию
-    public Reader() {
-        this.name = "";
-        this.surname = "";
-        this.cardNumber = "";
-    }
-
-    // Метод для ввода данных о читателе
-    public void input() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Введите имя читателя: ");
-        this.name = sc.nextLine();
-        System.out.print("Введите фамилию читателя: ");
-        this.surname = sc.nextLine();
-        System.out.print("Введите номер читательского билета: ");
-        this.cardNumber = sc.nextLine();
-    }
-
-    // Методы доступа
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    // Метод для вывода данных о читателе
-    public void print() {
-        System.out.println("Читатель: " + name + " " + surname + ", Номер карты: " + cardNumber);
-    }
-}
-
 class Book {
     private String title;
     private Author author;
@@ -188,6 +144,48 @@ class Book {
         System.out.println("Книга: " + title + ", Год: " + year + ", Доступных копий: " + copiesAvailable);
         author.print();
         category.print();
+    }
+}
+
+class Reader {
+    private String name;
+    private String surname;
+    private String cardNumber;
+
+    // Конструктор по умолчанию
+    public Reader() {
+        this.name = "";
+        this.surname = "";
+        this.cardNumber = "";
+    }
+
+    // Метод для ввода данных о читателе
+    public void input() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Введите имя читателя: ");
+        this.name = sc.nextLine();
+        System.out.print("Введите фамилию читателя: ");
+        this.surname = sc.nextLine();
+        System.out.print("Введите номер читательского билета: ");
+        this.cardNumber = sc.nextLine();
+    }
+
+    // Методы доступа
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    // Метод для вывода данных о читателе
+    public void print() {
+        System.out.println("Читатель: " + name + " " + surname + ", Номер карты: " + cardNumber);
     }
 }
 
