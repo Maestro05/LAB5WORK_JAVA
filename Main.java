@@ -75,68 +75,86 @@ class Category {
         System.out.println("Категория: " + name + ", Описание: " + description);
     }
 }
+
 class Book {
     private String title;
     private Author author;
     private Category category;
     private int year;
     private int copiesAvailable;
+    private static int bookCount = 0;
 
     // Конструктор по умолчанию
     public Book() {
         this.title = "";
-        this.year = 0;
-        this.copiesAvailable = 0;
         this.author = new Author();
         this.category = new Category();
+        this.year = 0;
+        this.copiesAvailable = 0;
+    }
+
+    // Статический метод для получения общего количества книг
+    public static int getBookCount() {
+        return bookCount;
     }
 
     // Метод для ввода данных о книге
-    public void input(Scanner scanner) {
+    public void input() {
+        Scanner sc = new Scanner(System.in);
         System.out.print("Введите название книги: ");
-        this.title = scanner.nextLine();
+        this.title = sc.nextLine();
 
-        this.author.input(scanner);
-        this.category.input(scanner);
+        this.author.input();
+        this.category.input();
 
         System.out.print("Введите год издания: ");
-        this.year = scanner.nextInt();
+        this.year = sc.nextInt();
         System.out.print("Введите количество доступных копий: ");
-        this.copiesAvailable = scanner.nextInt();
-        scanner.nextLine(); // Очистка буфера после ввода числа
+        this.copiesAvailable = sc.nextInt();
+        sc.nextLine();  // Очищаем буфер после ввода чисел
+
+        this.validateYear(); // Проверка года
+    }
+
+    // Метод для проверки года издания
+    public void validateYear() {
+        int currentYear = 2024; // Текущий год
+        if (year < 1000 || year > currentYear) {
+            System.out.println("Ошибка: Неверный год издания! Год должен быть между 1000 и текущим.");
+        }
     }
 
     // Методы доступа
     public String getTitle() {
-        return this.title;
+        return title;
     }
 
     public Author getAuthor() {
-        return this.author;
+        return author;
     }
 
     public Category getCategory() {
-        return this.category;
+        return category;
     }
 
     public int getYear() {
-        return this.year;
+        return year;
     }
 
     public int getCopiesAvailable() {
-        return this.copiesAvailable;
+        return copiesAvailable;
     }
 
     // Метод для уменьшения количества доступных экземпляров
     public void decreaseCopies() {
         if (copiesAvailable > 0) {
-            --copiesAvailable;
+            copiesAvailable--;
         }
     }
 
     // Метод для увеличения количества доступных экземпляров
     public void increaseCopies() {
-        ++copiesAvailable;
+        copiesAvailable++;
     }
 
     // Метод для вывода информации о книге
@@ -144,6 +162,18 @@ class Book {
         System.out.println("Книга: " + title + ", Год: " + year + ", Доступных копий: " + copiesAvailable);
         author.print();
         category.print();
+    }
+
+    // Статический метод, который увеличивает счетчик книг
+    public static void increaseBookCount() {
+        bookCount++;
+    }
+
+    // Деструктор (в Java нет явных деструкторов, поэтому эта логика будет просто вызываться при удалении объекта)
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        bookCount--;
     }
 }
 
@@ -209,5 +239,33 @@ class BookIssue {
         book.print();
         reader.print();
         System.out.println("Дата выдачи: " + issueDate + ", Срок возврата: " + dueDate);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Динамическое выделение памяти для книги
+        Book dynamicBook = new Book();
+        dynamicBook.input();  // Вводим данные о книге
+        Book.increaseBookCount(); // Увеличиваем счетчик книг
+
+        // Динамическое выделение памяти для читателя
+        Reader dynamicReader = new Reader();
+        dynamicReader.input();  // Вводим данные о читателе
+
+        // Ввод данных о выдаче книги
+        System.out.print("Введите дату выдачи (DD.MM.YYYY): ");
+        String issueDate = sc.nextLine();
+        System.out.print("Введите срок возврата (DD.MM.YYYY): ");
+        String dueDate = sc.nextLine();
+
+        // Создание записи о выдаче книги
+        BookIssue issue = new BookIssue(dynamicBook, dynamicReader, issueDate, dueDate);
+        issue.print();  // Выводим информацию о выдаче
+
+        // Вывод общего количества книг
+        System.out.println("Общее количество книг в системе: " + Book.getBookCount());
     }
 }
