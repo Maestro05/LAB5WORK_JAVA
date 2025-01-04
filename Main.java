@@ -1,293 +1,299 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-class Author {
-    private String name;
-    private String surname;
-    private String birthdate;
+// Базовый класс для всех элементов меню
+class MenuItem {
+    String name;    // Название блюда
+    double price;   // Цена блюда
 
-    public Author() {
-        this.name = "";
-        this.surname = "";
-        this.birthdate = "";
+    public MenuItem(String name, double price) {
+        this.name = name;
+        this.price = price;
     }
 
-    public void input() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Введите имя автора: ");
-        this.name = sc.nextLine();
-        System.out.print("Введите фамилию автора: ");
-        this.surname = sc.nextLine();
-        System.out.print("Введите дату рождения (DD.MM.YYYY): ");
-        this.birthdate = sc.nextLine();
+    public void display() {
+        System.out.println(name + " - " + price + " руб.");
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void print() {
-        System.out.println("Автор: " + name + " " + surname + ", Дата рождения: " + birthdate);
+    public double getPrice() {
+        return price;
     }
 }
 
-class Category {
-    private String name;
-    private String description;
-
-    public Category() {
-        this.name = "";
-        this.description = "";
-    }
-
-    public void input() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Введите название категории: ");
-        this.name = sc.nextLine();
-        System.out.print("Введите описание категории: ");
-        this.description = sc.nextLine();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void print() {
-        System.out.println("Категория: " + name + ", Описание: " + description);
-    }
-}
-
-class Book {
-    private String title;
-    private Author author;
-    private Category category;
-    private int year;
-    private int copiesAvailable;
-    private static int bookCount = 0;
-
-    public Book() {
-        this.title = "";
-        this.author = new Author();
-        this.category = new Category();
-        this.year = 0;
-        this.copiesAvailable = 0;
-    }
-
-    public static int getBookCount() {
-        return bookCount;
-    }
-
-    public void input() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Введите название книги: ");
-        this.title = sc.nextLine();
-
-        this.author.input();
-        this.category.input();
-
-        System.out.print("Введите год издания: ");
-        while (true) {
-            try {
-                this.year = Integer.parseInt(sc.nextLine());
-                if (this.year < 1000 || this.year > 2024) {
-                    System.out.println("Ошибка: Неверный год издания! Год должен быть между 1000 и 2024.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Ошибка: Введите корректный год.");
-            }
-        }
-
-        System.out.print("Введите количество доступных копий: ");
-        while (true) {
-            try {
-                this.copiesAvailable = Integer.parseInt(sc.nextLine());
-                if (this.copiesAvailable < 0) {
-                    System.out.println("Ошибка: Количество копий не может быть отрицательным.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Ошибка: Введите корректное количество.");
-            }
-        }
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getCopiesAvailable() {
-        return copiesAvailable;
-    }
-
-    public void decreaseCopies() {
-        if (copiesAvailable > 0) {
-            copiesAvailable--;
-        }
-    }
-
-    public void increaseCopies() {
-        copiesAvailable++;
-    }
-
-    public void print() {
-        System.out.println("Книга: " + title + ", Год: " + year + ", Доступных копий: " + copiesAvailable);
-        author.print();
-        category.print();
-    }
-
-    public static void increaseBookCount() {
-        bookCount++;
+// Класс для главного блюда
+class MainDish extends MenuItem {
+    public MainDish(String name, double price) {
+        super(name, price);
     }
 
     @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        bookCount--;
+    public void display() {
+        System.out.print("[Главное блюдо] ");
+        super.display();
     }
 }
 
-class Reader {
-    private String name;
-    private String surname;
-    private String cardNumber;
-
-    public Reader() {
-        this.name = "";
-        this.surname = "";
-        this.cardNumber = "";
+// Класс для закусок
+class Appetizer extends MenuItem {
+    public Appetizer(String name, double price) {
+        super(name, price);
     }
 
-    public void input() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Введите имя читателя: ");
-        this.name = sc.nextLine();
-        System.out.print("Введите фамилию читателя: ");
-        this.surname = sc.nextLine();
-        System.out.print("Введите номер читательского билета: ");
-        this.cardNumber = sc.nextLine();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void print() {
-        System.out.println("Читатель: " + name + " " + surname + ", Номер карты: " + cardNumber);
+    @Override
+    public void display() {
+        System.out.print("[Закуска] ");
+        super.display();
     }
 }
 
-class BookIssue {
-    private Book book;
-    private Reader reader;
-    private String issueDate;
-    private String dueDate;
-
-    public BookIssue(Book book, Reader reader, String issueDate, String dueDate) {
-        this.book = book;
-        this.reader = reader;
-        this.issueDate = issueDate;
-        this.dueDate = dueDate;
+// Класс для напитков
+class Drink extends MenuItem {
+    public Drink(String name, double price) {
+        super(name, price);
     }
 
-    public void print() {
-        System.out.println("Выдача книги: ");
-        book.print();
-        reader.print();
-        System.out.println("Дата выдачи: " + issueDate + ", Срок возврата: " + dueDate);
+    @Override
+    public void display() {
+        System.out.print("[Напиток] ");
+        super.display();
     }
 }
 
-// Вспомогательный класс для поиска книги по названию
-class BookSearch {
-    public static Book searchBookByTitle(Book[] books, String title) {
-        for (Book book : books) {
-            if (book.getTitle().equalsIgnoreCase(title)) {
-                return book;
-            }
+// Класс для десертов
+class Dessert extends MenuItem {
+    public Dessert(String name, double price) {
+        super(name, price);
+    }
+
+    @Override
+    public void display() {
+        System.out.print("[Десерт] ");
+        super.display();
+    }
+}
+
+// Вспомогательный класс для возврата информации о заказе
+class OrderInfo {
+    private double totalPrice;
+
+    public OrderInfo(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+}
+
+// Класс для обработки заказа
+class Order {
+    List<MenuItem> items = new ArrayList<>();  // Список заказанных позиций
+    private static int orderCount = 0;  // Статическое поле для подсчета заказов
+    private int orderNumber; // Номер текущего заказа
+
+    public Order() {
+        this.orderNumber = ++orderCount; // Инкрементируем счетчик заказов при создании нового объекта
+    }
+
+    public void addItem(MenuItem item) {
+        items.add(item);
+    }
+
+    public void displayOrder() {
+        double total = 0;
+        System.out.println("\nВаш заказ #" + orderNumber + ":");
+        for (MenuItem item : items) {
+            item.display();
+            total += item.getPrice();
         }
-        return null;
+        System.out.println("Общая сумма: " + total + " руб.");
+        OrderInfo orderInfo = new OrderInfo(total);
+        System.out.println("Общая стоимость (через вспомогательный класс): " + orderInfo.getTotalPrice());
+    }
+
+    // Статический метод для получения количества заказов
+    public static int getOrderCount() {
+        return orderCount;
+    }
+
+    // Метод для очистки текущего заказа
+    public void clearOrder() {
+        items.clear();
+    }
+
+    // Получить номер заказа
+    public int getOrderNumber() {
+        return orderNumber;
     }
 }
 
 public class Main {
+
+    // Метод для отображения главного меню
+    public static void displayMenu() {
+        System.out.println("\nВыберите категорию меню:");
+        System.out.println("1. Главное блюдо");
+        System.out.println("2. Закуски");
+        System.out.println("3. Напитки");
+        System.out.println("4. Десерты");
+        System.out.println("5. Завершить заказ (перейти к следующему заказу)");
+        System.out.println("6. Выйти из программы");
+        System.out.print("Введите номер категории: ");
+    }
+
+    // Метод для отображения главных блюд
+    public static void displayMainDishes() {
+        System.out.println("\nГлавные блюда:");
+        System.out.println("1. Борщ - 150 руб.");
+        System.out.println("2. Стейк - 300 руб.");
+        System.out.println("3. Пельмени - 180 руб.");
+        System.out.println("4. Ризотто - 220 руб.");
+    }
+
+    // Метод для отображения закусок
+    public static void displayAppetizers() {
+        System.out.println("\nЗакуски:");
+        System.out.println("1. Салат Цезарь - 120 руб.");
+        System.out.println("2. Оливье - 100 руб.");
+        System.out.println("3. Блины с икрой - 150 руб.");
+        System.out.println("4. Тосты с авокадо - 110 руб.");
+    }
+
+    // Метод для отображения напитков
+    public static void displayDrinks() {
+        System.out.println("\nНапитки:");
+        System.out.println("1. Кола - 50 руб.");
+        System.out.println("2. Минеральная вода - 40 руб.");
+        System.out.println("3. Сок апельсиновый - 70 руб.");
+        System.out.println("4. Чай черный - 60 руб.");
+    }
+
+    // Метод для отображения десертов
+    public static void displayDesserts() {
+        System.out.println("\nДесерты:");
+        System.out.println("1. Торт Наполеон - 80 руб.");
+        System.out.println("2. Мороженое - 60 руб.");
+        System.out.println("3. Чизкейк - 120 руб.");
+        System.out.println("4. Пирог с яблоками - 90 руб.");
+    }
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-        // Создаем массив книг
-        Book[] books = new Book[5]; // Пример: 5 книг
-        int bookIndex = 0;
+        // Создание объектов для главных блюд
+        MainDish[] mainDishes = {
+            new MainDish("Борщ", 150),
+            new MainDish("Стейк", 300),
+            new MainDish("Пельмени", 180),
+            new MainDish("Ризотто", 220)
+        };
 
-        // Добавляем книги в массив
-        while (bookIndex < books.length) {
-            Book dynamicBook = new Book();
-            dynamicBook.input(); // Вводим данные о книге
-            Book.increaseBookCount(); // Увеличиваем счетчик книг
-            books[bookIndex++] = dynamicBook;
+        // Создание объектов для закусок
+        Appetizer[] appetizers = {
+            new Appetizer("Салат Цезарь", 120),
+            new Appetizer("Оливье", 100),
+            new Appetizer("Блины с икрой", 150),
+            new Appetizer("Тосты с авокадо", 110)
+        };
 
-            System.out.print("Хотите добавить еще одну книгу? (y/n): ");
-            String response = sc.nextLine();
-            if (!response.equalsIgnoreCase("y")) {
-                break;
+        // Создание объектов для напитков
+        Drink[] drinks = {
+            new Drink("Кола", 50),
+            new Drink("Минеральная вода", 40),
+            new Drink("Сок апельсиновый", 70),
+            new Drink("Чай черный", 60)
+        };
+
+        // Создание объектов для десертов
+        Dessert[] desserts = {
+            new Dessert("Торт Наполеон", 80),
+            new Dessert("Мороженое", 60),
+            new Dessert("Чизкейк", 120),
+            new Dessert("Пирог с яблоками", 90)
+        };
+
+        boolean exit = false;
+        Order currentOrder = null;
+
+        while (!exit) {
+            displayMenu();
+
+            int category = scanner.nextInt();
+
+            switch (category) {
+                case 1: {
+                    // Главное блюдо
+                    displayMainDishes();
+                    System.out.print("Выберите главное блюдо (1-4): ");
+                    int choice = scanner.nextInt();
+                    if (choice >= 1 && choice <= 4) {
+                        if (currentOrder == null) currentOrder = new Order();
+                        currentOrder.addItem(mainDishes[choice - 1]);
+                    } else {
+                        System.out.println("Некорректный выбор!");
+                    }
+                    break;
+                }
+                case 2: {
+                    // Закуски
+                    displayAppetizers();
+                    System.out.print("Выберите закуску (1-4): ");
+                    int choice = scanner.nextInt();
+                    if (choice >= 1 && choice <= 4) {
+                        if (currentOrder == null) currentOrder = new Order();
+                        currentOrder.addItem(appetizers[choice - 1]);
+                    } else {
+                        System.out.println("Некорректный выбор!");
+                    }
+                    break;
+                }
+                case 3: {
+                    // Напитки
+                    displayDrinks();
+                    System.out.print("Выберите напиток (1-4): ");
+                    int choice = scanner.nextInt();
+                    if (choice >= 1 && choice <= 4) {
+                        if (currentOrder == null) currentOrder = new Order();
+                        currentOrder.addItem(drinks[choice - 1]);
+                    } else {
+                        System.out.println("Некорректный выбор!");
+                    }
+                    break;
+                }
+                case 4: {
+                    // Десерты
+                    displayDesserts();
+                    System.out.print("Выберите десерт (1-4): ");
+                    int choice = scanner.nextInt();
+                    if (choice >= 1 && choice <= 4) {
+                        if (currentOrder == null) currentOrder = new Order();
+                        currentOrder.addItem(desserts[choice - 1]);
+                    } else {
+                        System.out.println("Некорректный выбор!");
+                    }
+                    break;
+                }
+                case 5:
+                    // Завершить заказ и перейти к следующему
+                    if (currentOrder != null) {
+                        currentOrder.displayOrder();
+                        currentOrder = null; // Очистить текущий заказ
+                    } else {
+                        System.out.println("Нет текущего заказа!");
+                    }
+                    break;
+                case 6:
+                    // Выход из программы
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Некорректный выбор. Попробуйте снова.");
+                    break;
             }
         }
 
-        // Создание и ввод данных о читателе
-        Reader dynamicReader = new Reader();
-        dynamicReader.input();
-
-        // Ввод данных о выдаче книги
-        System.out.print("Введите дату выдачи (DD.MM.YYYY): ");
-        String issueDate = sc.nextLine();
-        System.out.print("Введите срок возврата (DD.MM.YYYY): ");
-        String dueDate = sc.nextLine();
-
-        // Поиск книги по названию
-        System.out.print("Введите название книги для поиска: ");
-        String searchTitle = sc.nextLine();
-        Book foundBook = BookSearch.searchBookByTitle(books, searchTitle);
-        if (foundBook != null) {
-            // Создание записи о выдаче книги
-            BookIssue issue = new BookIssue(foundBook, dynamicReader, issueDate, dueDate);
-            issue.print();  // Выводим информацию о выдаче
-        } else {
-            System.out.println("Книга с таким названием не найдена.");
-        }
-
-        // Вывод общего количества книг
-        System.out.println("Общее количество книг в системе: " + Book.getBookCount());
+        // Вывод количества заказов после выхода из программы
+        System.out.println("Всего сделано заказов: " + Order.getOrderCount());
     }
 }
